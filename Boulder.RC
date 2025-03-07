@@ -1,0 +1,568 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "boulder.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""boulder.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (Australia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENA)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+ICON_1                  ICON    DISCARDABLE     "boulder.ico"
+PLAYER_ICON             ICON    DISCARDABLE     "icon1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+THINGS                  BITMAP  MOVEABLE PURE   "things.bmp"
+TBAR                    BITMAP  DISCARDABLE     "toolbar1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// WAVE
+//
+
+XWHEEL                  WAVE    MOVEABLE PURE   "WHEEL.WAV"
+XSPLASH                 WAVE    MOVEABLE PURE   "SPLASH.WAV"
+XYUM                    WAVE    MOVEABLE PURE   "YUM.WAV"
+XALIEN                  WAVE    MOVEABLE PURE   "ALIEN.WAV"
+XTANK                   WAVE    MOVEABLE PURE   "TANK.WAV"
+XNUT                    WAVE    MOVEABLE PURE   "NUT.WAV"
+XCRACK                  WAVE    MOVEABLE PURE   "CRACK.WAV"
+XDOOR                   WAVE    MOVEABLE PURE   "DOOR.WAV"
+XMAGIC                  WAVE    MOVEABLE PURE   "MAGIC.WAV"
+XWALL                   WAVE    MOVEABLE PURE   "WALL.WAV"
+XBUG                    WAVE    MOVEABLE PURE   "BUG.WAV"
+XCHEESE                 WAVE    MOVEABLE PURE   "CHEESE.WAV"
+XEXIT                   WAVE    MOVEABLE PURE   "EXIT.WAV"
+XMOVE                   WAVE    MOVEABLE PURE   "MOVE.WAV"
+XEXPLODE                WAVE    MOVEABLE PURE   "EXPLODE.WAV"
+XDIE                    WAVE    MOVEABLE PURE   "DIE.WAV"
+XPUSH                   WAVE    MOVEABLE PURE   "PUSH.WAV"
+XDIAMOND                WAVE    MOVEABLE PURE   "DIAMOND.WAV"
+XPICKUP                 WAVE    MOVEABLE PURE   "PICKUP.WAV"
+XBOULDER                WAVE    MOVEABLE PURE   "BOULDER.WAV"
+XDIG                    WAVE    MOVEABLE PURE   "DIG.WAV"
+XCLOCK                  WAVE    MOVEABLE PURE   "CLOCK.WAV"
+XMINE                   WAVE    MOVEABLE PURE   "MINE.WAV"
+XSQUASH                 WAVE    MOVEABLE PURE   "SQUASH.WAV"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+TOOLBOX DIALOGEX 300, 10, 131, 175
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP | WS_EX_STATICEDGE
+CAPTION "Design"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",ID_BUTTONS,"Static",SS_ETCHEDFRAME | SS_SUNKEN,5,5,
+                    115,45
+    LTEXT           "Time &allowed:",IDC_STATIC,5,55,60,10
+    EDITTEXT        IDC_EDIT2,66,55,27,12,ES_READONLY
+    CONTROL         "Generic1",ID_TIME,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,95,55,10,
+                    10
+    CONTROL         "",IDC_BIGICON,"Static",SS_GRAYFRAME | SS_SUNKEN,95,55,
+                    24,22
+    LTEXT           "Diamonds &needed:",IDC_STATIC,5,67,60,10
+    EDITTEXT        IDC_EDIT3,66,67,27,12,ES_READONLY
+    CONTROL         "Generic1",ID_DIAMONDS,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,96,69,9,
+                    10
+    LTEXT           "&Magic Wall Time:",IDC_STATIC,5,79,60,10
+    EDITTEXT        IDC_EDIT4,66,79,27,12,ES_READONLY
+    CONTROL         "Generic1",ID_MAGIC,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,95,81,9,
+                    10
+    LTEXT           "Cheese &Growth:",IDC_STATIC,5,91,55,10
+    EDITTEXT        IDC_EDIT5,66,91,27,12,ES_READONLY
+    CONTROL         "Generic1",ID_CHEESE,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,95,95,9,
+                    10
+    LTEXT           "&Wheel Time:",IDC_STATIC,5,103,45,10
+    EDITTEXT        IDC_EDIT6,66,103,27,12,ES_READONLY
+    CONTROL         "Generic1",ID_WHEEL,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS,95,106,9,
+                    10
+    GROUPBOX        "&Level",IDC_STATIC,5,114,88,25
+    EDITTEXT        IDC_EDIT1,10,123,30,12,ES_AUTOHSCROLL | ES_READONLY | 
+                    WS_GROUP
+    CONTROL         "Spin1",ID_LEVEL,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    WS_DISABLED,33,106,9,10
+    LTEXT           "of",IDC_STATIC,45,125,10,10
+    LTEXT           "1",ID_NUMLEVELS,60,125,15,10
+    DEFPUSHBUTTON   "&Test",ID_TEST,5,143,55,14
+    PUSHBUTTON      "&Close",ID_CLOSE,68,143,55,14
+END
+
+PASSWORD DIALOG DISCARDABLE  31, 47, 182, 55
+STYLE DS_MODALFRAME | DS_CENTERMOUSE | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Design"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        ID_PWEDIT,60,30,50,13,ES_UPPERCASE | ES_PASSWORD | 
+                    WS_DISABLED
+    DEFPUSHBUTTON   "&OK",IDOK,135,10,40,15
+    PUSHBUTTON      "&Cancel",IDCANCEL,135,30,40,15
+    GROUPBOX        "Game",IDC_STATIC,5,3,120,47
+    CONTROL         "&New",ID_PWNEW,"Button",BS_AUTORADIOBUTTON | WS_GROUP | 
+                    WS_TABSTOP,10,15,35,10
+    CONTROL         "&Existing",ID_EXISTING,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,10,30,45,15
+    GROUPBOX        "Password",IDC_STATIC,55,21,60,25,WS_GROUP
+END
+
+TITLEDLG DIALOG DISCARDABLE  70, 25, 139, 164
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Boulder"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "&Open Game...",ID_OPEN,10,5,55,14,WS_GROUP
+    PUSHBUTTON      "High &Scores",ID_HISCORE,75,5,55,14,WS_DISABLED
+    GROUPBOX        "Play&er",IDC_STATIC,5,25,130,65
+    COMBOBOX        ID_PLAYER,10,35,60,55,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_DISABLED | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&New Player...",ID_NEWPLAYER,75,35,55,14,WS_DISABLED
+    LTEXT           "Levels Completed:",IDC_STATIC,10,55,59,10
+    LTEXT           "0",ID_LEVELSCOMPLETED,75,55,54,10
+    LTEXT           "Games Played:",IDC_STATIC,10,65,50,10
+    LTEXT           "0",ID_GAMESPLAYED,75,65,54,10
+    LTEXT           "Score:",IDC_STATIC,10,75,55,10
+    LTEXT           "0",ID_SCORE,75,75,54,10
+    GROUPBOX        "&Level",IDC_STATIC,5,95,84,25
+    EDITTEXT        IDC_EDIT1,10,104,27,12,ES_READONLY | WS_GROUP
+    CONTROL         "Spin1",ID_LEVEL,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS | WS_DISABLED,25,90,11,15
+    LTEXT           "of",IDC_STATIC,45,105,10,10
+    LTEXT           "1",ID_NUMLEVELS,60,105,15,10,NOT WS_GROUP
+    PUSHBUTTON      "&Help",ID_HLP,5,125,40,14
+    PUSHBUTTON      "&About",ID_ABOUT,50,125,40,14
+    CHECKBOX        "So&und",ID_SOUND,95,129,43,10,WS_DISABLED
+    PUSHBUTTON      "&Design...",ID_DESIGN,5,145,40,14
+    PUSHBUTTON      "E&xit",ID_EXIT,50,145,40,14
+    DEFPUSHBUTTON   "&Play",ID_PLAY,95,145,40,14,WS_DISABLED
+END
+
+NEWPLAYER DIALOG DISCARDABLE  0, 0, 207, 111
+STYLE DS_MODALFRAME | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "New Player"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        ID_NEWPLAYER,136,85,60,12
+    PUSHBUTTON      "&OK",IDOK,146,10,55,14
+    PUSHBUTTON      "&Cancel",IDCANCEL,146,30,55,14
+    PUSHBUTTON      "&Delete Player",ID_DELPLAYER,146,50,55,15
+    GROUPBOX        "&Players",IDC_STATIC,5,5,70,100
+    LISTBOX         ID_PLAYERS,10,15,60,85,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_TABSTOP
+    DEFPUSHBUTTON   "<-- &Replace",ID_REPLACE,80,85,45,15
+    GROUPBOX        "&New Player",IDC_STATIC,130,75,70,30
+END
+
+HISCORE DIALOG DISCARDABLE  65486, 0, 352, 130
+STYLE DS_MODALFRAME | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "High Scores"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDCANCEL,295,5,50,14
+    CONTROL         "List1",ID_HISCORES,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_NOLABELWRAP | WS_BORDER | WS_TABSTOP,
+                    5,5,280,120
+END
+
+BEFOREAFTER DIALOG DISCARDABLE  0, 0, 192, 73
+STYLE DS_MODALFRAME | DS_CENTERMOUSE | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Insert Level"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&Before",IDYES,10,50,50,15
+    PUSHBUTTON      "&Cancel",IDCANCEL,130,50,50,15
+    LTEXT           "Do you want to insert the new level Before or After the current level ?",
+                    IDC_STATIC,55,15,130,20
+    PUSHBUTTON      "&After",IDNO,70,50,50,15
+    ICON            "PLAYER_ICON",IDC_STATIC,20,15,18,20
+END
+
+SAVEPASSWORD DIALOG DISCARDABLE  0, 0, 161, 21
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "&Password:",IDC_STATIC,5,2,38,10,NOT WS_GROUP
+    EDITTEXT        ID_PWEDIT,54,1,101,12,ES_UPPERCASE
+END
+
+SHAREWARE DIALOGEX 0, 0, 207, 210
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Shareware Info"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "&OK",IDOK,150,10,50,14
+    ICON            "ICON_1",IDC_STATIC,5,5,20,20
+    LTEXT           "Boulder v1.0 (Build 57)\nBy Michael Alexander\nCopyright © April 1998",
+                    IDC_STATIC,40,5,95,30
+    EDITTEXT        ID_SWTEXT,5,35,195,170,ES_MULTILINE | ES_READONLY,
+                    WS_EX_DLGMODALFRAME
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    "TOOLBOX", DIALOG
+    BEGIN
+        RIGHTMARGIN, 130
+        BOTTOMMARGIN, 160
+    END
+
+    "NEWPLAYER", DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 200
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 104
+    END
+
+    "HISCORE", DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 345
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 123
+    END
+
+    "BEFOREAFTER", DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 185
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 66
+    END
+
+    "SAVEPASSWORD", DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 154
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 14
+    END
+
+    "SHAREWARE", DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 200
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 203
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "0c0904b0"
+        BEGIN
+            VALUE "Comments", "Written by Michael Alexander\0"
+            VALUE "CompanyName", "Mikeysoft\0"
+            VALUE "FileDescription", "Boulder\0"
+            VALUE "FileVersion", "57\0"
+            VALUE "InternalName", "Boulder\0"
+            VALUE "LegalCopyright", "Copyright © April 1998\0"
+            VALUE "OriginalFilename", "Boulder.exe\0"
+            VALUE "ProductName", "Boulder Game\0"
+            VALUE "ProductVersion", "1.0\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0xc09, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_FILL                CURSOR  DISCARDABLE     "cursor1.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+BOULDER ACCELERATORS DISCARDABLE 
+BEGIN
+    "C",            ID_CLOSE,               VIRTKEY, NOINVERT
+    "C",            ID_COPY,                VIRTKEY, CONTROL, NOINVERT
+    "F",            ID_FILL,                VIRTKEY, CONTROL, NOINVERT
+    "H",            ID_HLP,                 VIRTKEY, CONTROL, NOINVERT
+    "P",            ID_PLAY,                VIRTKEY, NOINVERT
+    "T",            ID_TEST,                VIRTKEY, NOINVERT
+    "V",            ID_PASTE,               VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_DELLEVEL,            VIRTKEY, NOINVERT
+    VK_DELETE,      ID_CUT,                 VIRTKEY, SHIFT, NOINVERT
+    VK_END,         ID_END,                 VIRTKEY, NOINVERT
+    VK_ESCAPE,      ID_FINISH,              VIRTKEY, NOINVERT
+    VK_HOME,        ID_HOME,                VIRTKEY, NOINVERT
+    VK_INSERT,      ID_ADDLEVEL,            VIRTKEY, NOINVERT
+    VK_INSERT,      ID_COPY,                VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_PASTE,               VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EXIT,                VIRTKEY, NOINVERT
+    "X",            ID_CUT,                 VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+TBAR TOOLBAR DISCARDABLE  16, 16
+BEGIN
+    BUTTON      ID_TEST
+    BUTTON      ID_TEST
+    BUTTON      ID_TEST
+    BUTTON      ID_TEST
+    BUTTON      ID_TEST
+    BUTTON      ID_TEST
+    BUTTON      ID_BUTTON40026
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_16COLOUR            "Boulder has detected that your display is configured for 16 colours.\nWhile Boulder will run successfully, the colours which you see may be less than optimum."
+    IDS_NOSOUNDMEM          "Out of memory for Sound Buffer."
+    IDS_NOSOUNDLOCK         "Failed to lock memory for Sound Buffer."
+    IDS_AREYOUSURE          "Are you sure ?"
+    IDS_SAVECHANGES         "Do you want to save changes to this game ?"
+    IDS_CLEARLEVEL          "Are you sure you want to clear this level ?"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_DELLEVEL            "Are you sure you want to delete this level ?"
+    IDS_PRESSESC            " Press ESC to finish a Game"
+    IDS_PASSWORDBAD         "Sorry, the password to access this game is incorrect. Please try again."
+    IDS_REMSCORES           "Each player is assigned a unique number by Boulder. If you delete this player, you will not\nbe able to restore the scores, even if you create another player with the same name.\n\nAre you sure you want to remove all scores for %s ?"
+    IDS_BADNAME             "Invalid Player Name."
+    IDS_DUPNAME             "Duplicate Player Name."
+    IDS_PLAYER              "Player"
+    IDS_GAMESPLAYED         "Games Played"
+    IDS_LEVELSCOMPLETED     "Levels Completed"
+    IDS_SCORE               "Score"
+    IDS_NOTFOUND            """%s"" not found."
+    IDS_BADINSERT           "Error inserting level."
+    IDS_BADDELETE           "Error deleting level."
+    IDS_BADSAVE             "Error saving level."
+    IDS_BADREAD             "Error reading level."
+    IDS_BADREGREAD          "Error reading scores from Registry."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PRESSPLAY           " Press Play to play a Game"
+    IDS_NONELOADED          " No Game Loaded"
+    IDS_FINISHGAME          "&Finish Game\tESC"
+    IDS_LEVELNO             "   Level: %i"
+    IDS_TEMPFAILED          "Error creating temporary file."
+    IDS_OVERWRITE           "Are you sure you want to overwrite this level with data from the Clipboard ?"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_ADDLEVEL             "Insert Level (Ins)"
+    ID_DELLEVEL             "Delete Level (Del)"
+    ID_HLP                  "Help (Ctrl+H)"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_CUT                  "Cut (Ctrl+X)"
+    ID_PASTE                "Paste (Ctrl+V)"
+    ID_COPY                 "Copy (Ctrl+C)"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILL                 "Fill (Ctrl+F)"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    GDIAMOND_S              "Emerald"
+    NUT_S                   "Nut"
+    TANK_F_N                "Tank (Up)"
+    TANK_F_S                "Tank (Down)"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    DIRT                    "Dirt"
+    BRICK                   "Brick"
+    MAGICWALL               "Magic Wall"
+    PRE_OUT                 "Exit"
+    MINE                    "Mine"
+    STEEL                   "Stone"
+    KEY_RED                 "Red Key"
+    KEY_GREEN               "Green Key"
+    KEY_BLUE                "Blue Key"
+    DOOR_RED                "Red Door"
+    DOOR_GREEN              "Green Door"
+    DOOR_BLUE               "Blue Door"
+    WHEEL                   "Wheel"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    TANK_F_E                "Tank (Right)"
+    TANK_F_W                "Tank (Left)"
+    MAN                     "Man"
+    CHEESE_S                "Cheese"
+    BOMB_S                  "Bomb"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    BOULDER_S               "Boulder"
+    IDS_UNINSTALL           "The SHIFT key was pressed as you exited.\nThis is the signal for Boulder to uninstall itself from the registry, and to\nremove the scores for all players. Boulder files will not be removed.\n\nAre you sure that you want to uninstall Boulder ?"
+    IDS_UNINSTALLOK         "Boulder has removed all references to itself from the Registry.\n\nUntil you run Boulder again, you will not be able to double-click on a \nBoulder Game to run it, nor will you see the correct Icon for a Boulder Game."
+    BDIAMOND_S              "Diamond"
+    INVISIBLE               "Invisible Wall"
+    ACID                    "Acid"
+    ALIEN                   "Alien"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    YUM_STILL               "Yum-Yum"
+    SPONGE                  "Sponge"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    BUG_F_N                 "Bug (Up)"
+    BUG_F_S                 "Bug (Down)"
+    BUG_F_E                 "Bug (Right)"
+    BUG_F_W                 "Bug (Left)"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    99                      "Space"
+END
+
+#endif    // English (Australia) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
