@@ -1,0 +1,8 @@
+[OPTIONS]
+HCW=0
+LCID=0xc09 0x0 0x0 ;English (Australian)
+REPORT=Yes
+HLP=.\test.hlp
+
+[WINDOWS]
+main="",(653,102,360,600),20736,(r14876671),(r12632256),f3

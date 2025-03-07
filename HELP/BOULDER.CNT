@@ -1,0 +1,24 @@
+:Base Boulder.hlp
+:Title Boulder Help
+2 Introduction=IDH_INTRO
+1 Shareware Information
+2 Shareware Information=IDH_SHAREWARE
+1 Playing the Game
+2 The Object of the Game=IDH_OBJECT
+2 Moving Around=IDH_MOVING
+2 Scoring Points=IDH_SCORING
+1 Designing a Game
+2 Entering the Level Editor=IDH_LEVELED
+2 Designing the Level=IDH_LEVELDES
+2 Adding and Removing Levels=IDH_LEVELINS
+2 Cutting and Pasting=IDH_CUTPASTE
+2 Testing the Level=IDH_TEST
+2 Saving the Level=IDH_SAVE
+1 Creatures
+2 All Creatures Great and Small=IDH_CREATURES
+1 Tips and Tricks
+2 Tips and Tricks=IDH_TIPS
+1 Technical Information
+2 Boulder's use of the Registry=IDH_REGISTRY
+2 Uninstalling Boulder=IDH_UNINSTALL
+2 Transferring scores to another computer=IDH_TRANSFER
