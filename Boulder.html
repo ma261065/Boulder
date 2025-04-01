@@ -45,6 +45,20 @@
             margin-top: 20px;
             color: #aaa;
         }
+        
+        #sound-toggle {
+            margin-top: 10px;
+            background-color: #555;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        #sound-toggle:hover {
+            background-color: #666;
+        }
     </style>
 </head>
 <body>
@@ -58,6 +72,8 @@
             <div id="diamonds-info">Diamonds: 0/10</div>
             <div id="time-info">Time: 120</div>
         </div>
+        
+        <button id="sound-toggle">Sound: ON</button>
     </div>
     
     <div id="controls">
@@ -91,6 +107,7 @@
         let timerInterval = null;
         let isGameOver = false;
         let hasExitAppeared = false;
+        let soundEnabled = true;
         
         // Canvas setup
         const canvas = document.getElementById('gameCanvas');
@@ -100,6 +117,111 @@
         const levelInfo = document.getElementById('level-info');
         const diamondsInfo = document.getElementById('diamonds-info');
         const timeInfo = document.getElementById('time-info');
+        const soundToggle = document.getElementById('sound-toggle');
+        
+        // Sound effects - using AudioContext for better browser compatibility
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const sounds = {};
+        
+        // Sound effect definitions using oscillators
+        function createSound(type, frequency, duration, volume) {
+            return () => {
+                if (!soundEnabled) return;
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = type;
+                oscillator.frequency.value = frequency;
+                gainNode.gain.value = volume;
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Add slight attack/decay for smoother sound
+                const now = audioContext.currentTime;
+                gainNode.gain.setValueAtTime(0, now);
+                gainNode.gain.linearRampToValueAtTime(volume, now + 0.01);
+                gainNode.gain.linearRampToValueAtTime(0, now + duration);
+                
+                oscillator.start();
+                oscillator.stop(now + duration);
+            };
+        }
+        
+        // Define the sounds
+        sounds.move = createSound('square', 220, 0.1, 0.2);
+        sounds.dig = createSound('sawtooth', 180, 0.15, 0.25);
+        sounds.diamond = createSound('sine', 880, 0.2, 0.3);
+        sounds.boulder = createSound('square', 150, 0.2, 0.3);
+        sounds.fall = createSound('square', 120, 0.4, 0.3);
+        sounds.levelComplete = () => {
+            if (!soundEnabled) return;
+            
+            const notes = [392, 493.88, 587.33, 783.99]; // G4, B4, D5, G5
+            const noteLength = 0.2;
+            
+            notes.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'sine';
+                oscillator.frequency.value = freq;
+                gainNode.gain.value = 0.3;
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                const now = audioContext.currentTime;
+                const startTime = now + (index * noteLength);
+                
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.02);
+                gainNode.gain.linearRampToValueAtTime(0, startTime + noteLength - 0.02);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + noteLength);
+            });
+        };
+        sounds.gameOver = () => {
+            if (!soundEnabled) return;
+            
+            const notes = [392, 349.23, 293.66, 261.63]; // G4, F4, D4, C4
+            const noteLength = 0.3;
+            
+            notes.forEach((freq, index) => {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = freq;
+                gainNode.gain.value = 0.3;
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                const now = audioContext.currentTime;
+                const startTime = now + (index * noteLength);
+                
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+                gainNode.gain.linearRampToValueAtTime(0, startTime + noteLength - 0.05);
+                
+                oscillator.start(startTime);
+                oscillator.stop(startTime + noteLength);
+            });
+        };
+        
+        // Toggle sound
+        soundToggle.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
+            soundToggle.textContent = `Sound: ${soundEnabled ? 'ON' : 'OFF'}`;
+            
+            // Resume AudioContext if it was suspended (browser policy)
+            if (audioContext.state === 'suspended' && soundEnabled) {
+                audioContext.resume();
+            }
+        });
         
         // Sprites
         const sprites = {};
@@ -249,6 +371,11 @@
                             grid[y][x] = ENTITY_TYPES.EMPTY;
                             somethingFell = true;
                             
+                            // Play fall sound occasionally to avoid sound spam
+                            if (Math.random() < 0.1) {
+                                sounds.fall();
+                            }
+                            
                             // Check if it falls on player
                             if (playerY === y + 2 && playerX === x) {
                                 gameOver(false);
@@ -262,6 +389,11 @@
                             grid[y][x - 1] = grid[y][x];
                             grid[y][x] = ENTITY_TYPES.EMPTY;
                             somethingFell = true;
+                            
+                            // Play roll sound occasionally
+                            if (Math.random() < 0.1) {
+                                sounds.boulder();
+                            }
                         } 
                         else if ((grid[y + 1][x] === ENTITY_TYPES.BOULDER || grid[y + 1][x] === ENTITY_TYPES.DIAMOND) && 
                                  (grid[y + 1][x + 1] === ENTITY_TYPES.EMPTY && grid[y][x + 1] === ENTITY_TYPES.EMPTY)) {
@@ -269,6 +401,11 @@
                             grid[y][x + 1] = grid[y][x];
                             grid[y][x] = ENTITY_TYPES.EMPTY;
                             somethingFell = true;
+                            
+                            // Play roll sound occasionally
+                            if (Math.random() < 0.1) {
+                                sounds.boulder();
+                            }
                         }
                     }
                 }
@@ -321,6 +458,11 @@
                 return;
             }
             
+            // Ensure AudioContext is running (browser policy requires user interaction)
+            if (audioContext.state === 'suspended' && soundEnabled) {
+                audioContext.resume();
+            }
+            
             let newX = playerX;
             let newY = playerY;
             
@@ -370,6 +512,7 @@
                     // Move the boulder
                     grid[y][pushDestX] = ENTITY_TYPES.BOULDER;
                     grid[y][x] = ENTITY_TYPES.EMPTY;
+                    sounds.boulder();
                     return true;
                 }
                 return false;
@@ -381,6 +524,17 @@
         // Move the player to a new position
         function movePlayer(newX, newY) {
             const destType = grid[newY][newX];
+            
+            // Play appropriate sound based on destination
+            if (destType === ENTITY_TYPES.EMPTY) {
+                sounds.move();
+            } else if (destType === ENTITY_TYPES.DIRT) {
+                sounds.dig();
+            } else if (destType === ENTITY_TYPES.DIAMOND) {
+                sounds.diamond();
+            } else if (destType === ENTITY_TYPES.EXIT) {
+                sounds.levelComplete();
+            }
             
             // Handle diamond collection
             if (destType === ENTITY_TYPES.DIAMOND) {
@@ -428,6 +582,9 @@
             ctx.font = '24px Arial';
             ctx.fillText(`Starting Level ${currentLevel} in 3 seconds...`, canvas.width / 2, canvas.height / 2 + 20);
             
+            // Play level complete sound
+            sounds.levelComplete();
+            
             // Start new level after delay
             setTimeout(() => {
                 createLevel(currentLevel);
@@ -441,6 +598,9 @@
             isGameOver = true;
             clearInterval(gameInterval);
             clearInterval(timerInterval);
+            
+            // Play game over sound
+            sounds.gameOver();
             
             // Show game over message
             ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
