@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boulder - Web Version</title>
+    <style>
+        body {
+            background-color: #333;
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+        }
+        
+        #game-container {
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        canvas {
+            border: 2px solid #555;
+            background-color: black;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+        
+        #info-panel {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 10px auto;
+            background-color: #222;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        #level-info, #diamonds-info, #time-info {
+            font-size: 18px;
+        }
+        
+        #controls {
+            margin-top: 20px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <h1>Boulder</h1>
+    
+    <div id="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div id="info-panel">
+            <div id="level-info">Level: 1</div>
+            <div id="diamonds-info">Diamonds: 0/10</div>
+            <div id="time-info">Time: 120</div>
+        </div>
+    </div>
+    
+    <div id="controls">
+        <p>Controls: Use arrow keys to move</p>
+    </div>
+    
+    <script>
+        // Game constants
+        const TILE_SIZE = 40;
+        const GRID_WIDTH = 20;
+        const GRID_HEIGHT = 15;
+        const ENTITY_TYPES = {
+            EMPTY: 0,
+            WALL: 1,
+            DIRT: 2,
+            BOULDER: 3,
+            DIAMOND: 4,
+            PLAYER: 5,
+            EXIT: 6
+        };
+        
+        // Game variables
+        let grid = [];
+        let playerX = 0;
+        let playerY = 0;
+        let diamondsCollected = 0;
+        let diamondsNeeded = 10;
+        let currentLevel = 1;
+        let timeLeft = 120;
+        let gameInterval = null;
+        let timerInterval = null;
+        let isGameOver = false;
+        let hasExitAppeared = false;
+        
+        // Canvas setup
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Info displays
+        const levelInfo = document.getElementById('level-info');
+        const diamondsInfo = document.getElementById('diamonds-info');
+        const timeInfo = document.getElementById('time-info');
+        
+        // Sprites
+        const sprites = {};
+        const spriteSources = {
+            'wall': createColorBlock('#555'),
+            'dirt': createColorBlock('#8B4513'),
+            'boulder': createColorBlock('#AAA', true),
+            'diamond': createColorBlock('#00FFFF', true),
+            'player': createColorBlock('#FF0000'),
+            'exit': createColorBlock('#00FF00')
+        };
+        
+        // Create a colored block as a placeholder for sprites
+        function createColorBlock(color, isRound = false) {
+            const canvas = document.createElement('canvas');
+            canvas.width = TILE_SIZE;
+            canvas.height = TILE_SIZE;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = color;
+            if (isRound) {
+                ctx.beginPath();
+                ctx.arc(TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/2 - 4, 0, Math.PI * 2);
+                ctx.fill();
+            } else {
+                ctx.fillRect(2, 2, TILE_SIZE - 4, TILE_SIZE - 4);
+            }
+            
+            return canvas;
+        }
+        
+        // Load sprites
+        function loadSprites() {
+            for (const key in spriteSources) {
+                sprites[key] = spriteSources[key];
+            }
+        }
+        
+        // Initialize the game
+        function init() {
+            loadSprites();
+            createLevel(currentLevel);
+            
+            // Start game loop
+            gameInterval = setInterval(updateGame, 100);
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            // Add keyboard listeners
+            window.addEventListener('keydown', handleKeyPress);
+        }
+        
+        // Create a level
+        function createLevel(level) {
+            grid = [];
+            
+            // Reset variables
+            diamondsCollected = 0;
+            hasExitAppeared = false;
+            timeLeft = 120;
+            
+            // Update display
+            levelInfo.textContent = `Level: ${level}`;
+            updateDiamondDisplay();
+            timeInfo.textContent = `Time: ${timeLeft}`;
+            
+            // Create empty grid
+            for (let y = 0; y < GRID_HEIGHT; y++) {
+                const row = [];
+                for (let x = 0; x < GRID_WIDTH; x++) {
+                    if (x === 0 || y === 0 || x === GRID_WIDTH - 1 || y === GRID_HEIGHT - 1) {
+                        row.push(ENTITY_TYPES.WALL);
+                    } else {
+                        row.push(ENTITY_TYPES.EMPTY);
+                    }
+                }
+                grid.push(row);
+            }
+            
+            // Add walls (more for higher levels)
+            const wallCount = 20 + level * 5;
+            for (let i = 0; i < wallCount; i++) {
+                const x = Math.floor(Math.random() * (GRID_WIDTH - 2)) + 1;
+                const y = Math.floor(Math.random() * (GRID_HEIGHT - 2)) + 1;
+                grid[y][x] = ENTITY_TYPES.WALL;
+            }
+            
+            // Add dirt
+            for (let y = 1; y < GRID_HEIGHT - 1; y++) {
+                for (let x = 1; x < GRID_WIDTH - 1; x++) {
+                    if (grid[y][x] === ENTITY_TYPES.EMPTY && Math.random() < 0.4) {
+                        grid[y][x] = ENTITY_TYPES.DIRT;
+                    }
+                }
+            }
+            
+            // Add boulders
+            const boulderCount = 10 + level * 2;
+            for (let i = 0; i < boulderCount; i++) {
+                const x = Math.floor(Math.random() * (GRID_WIDTH - 2)) + 1;
+                const y = Math.floor(Math.random() * (GRID_HEIGHT - 2)) + 1;
+                if (grid[y][x] !== ENTITY_TYPES.WALL) {
+                    grid[y][x] = ENTITY_TYPES.BOULDER;
+                }
+            }
+            
+            // Add diamonds
+            diamondsNeeded = 5 + level * 2;
+            for (let i = 0; i < diamondsNeeded + 5; i++) {
+                const x = Math.floor(Math.random() * (GRID_WIDTH - 2)) + 1;
+                const y = Math.floor(Math.random() * (GRID_HEIGHT - 2)) + 1;
+                if (grid[y][x] !== ENTITY_TYPES.WALL && grid[y][x] !== ENTITY_TYPES.BOULDER) {
+                    grid[y][x] = ENTITY_TYPES.DIAMOND;
+                }
+            }
+            
+            // Add player
+            let playerPlaced = false;
+            while (!playerPlaced) {
+                const x = Math.floor(Math.random() * (GRID_WIDTH - 2)) + 1;
+                const y = Math.floor(Math.random() * (GRID_HEIGHT - 2)) + 1;
+                if (grid[y][x] === ENTITY_TYPES.EMPTY || grid[y][x] === ENTITY_TYPES.DIRT) {
+                    grid[y][x] = ENTITY_TYPES.PLAYER;
+                    playerX = x;
+                    playerY = y;
+                    playerPlaced = true;
+                }
+            }
+            
+            // Draw initial state
+            drawGame();
+        }
+        
+        // Update the game state
+        function updateGame() {
+            if (isGameOver) return;
+            
+            // Process falling objects (boulders and diamonds)
+            let somethingFell = false;
+            
+            // Process from bottom to top, right to left
+            for (let y = GRID_HEIGHT - 2; y > 0; y--) {
+                for (let x = GRID_WIDTH - 2; x > 0; x--) {
+                    if (grid[y][x] === ENTITY_TYPES.BOULDER || grid[y][x] === ENTITY_TYPES.DIAMOND) {
+                        // Check if there's empty space below
+                        if (grid[y + 1][x] === ENTITY_TYPES.EMPTY) {
+                            grid[y + 1][x] = grid[y][x];
+                            grid[y][x] = ENTITY_TYPES.EMPTY;
+                            somethingFell = true;
+                            
+                            // Check if it falls on player
+                            if (playerY === y + 2 && playerX === x) {
+                                gameOver(false);
+                                return;
+                            }
+                        } 
+                        // Check if it can roll off another boulder or diamond
+                        else if ((grid[y + 1][x] === ENTITY_TYPES.BOULDER || grid[y + 1][x] === ENTITY_TYPES.DIAMOND) && 
+                                 (grid[y + 1][x - 1] === ENTITY_TYPES.EMPTY && grid[y][x - 1] === ENTITY_TYPES.EMPTY)) {
+                            // Roll left
+                            grid[y][x - 1] = grid[y][x];
+                            grid[y][x] = ENTITY_TYPES.EMPTY;
+                            somethingFell = true;
+                        } 
+                        else if ((grid[y + 1][x] === ENTITY_TYPES.BOULDER || grid[y + 1][x] === ENTITY_TYPES.DIAMOND) && 
+                                 (grid[y + 1][x + 1] === ENTITY_TYPES.EMPTY && grid[y][x + 1] === ENTITY_TYPES.EMPTY)) {
+                            // Roll right
+                            grid[y][x + 1] = grid[y][x];
+                            grid[y][x] = ENTITY_TYPES.EMPTY;
+                            somethingFell = true;
+                        }
+                    }
+                }
+            }
+            
+            // Check if exit should appear
+            if (!hasExitAppeared && diamondsCollected >= diamondsNeeded) {
+                createExit();
+                hasExitAppeared = true;
+            }
+            
+            // Redraw if something changed
+            if (somethingFell) {
+                drawGame();
+            }
+        }
+        
+        // Update the timer
+        function updateTimer() {
+            if (isGameOver) return;
+            
+            timeLeft--;
+            timeInfo.textContent = `Time: ${timeLeft}`;
+            
+            if (timeLeft <= 0) {
+                gameOver(false);
+            }
+        }
+        
+        // Create an exit when enough diamonds are collected
+        function createExit() {
+            let exitPlaced = false;
+            while (!exitPlaced) {
+                const x = Math.floor(Math.random() * (GRID_WIDTH - 2)) + 1;
+                const y = Math.floor(Math.random() * (GRID_HEIGHT - 2)) + 1;
+                if (grid[y][x] === ENTITY_TYPES.EMPTY || grid[y][x] === ENTITY_TYPES.DIRT) {
+                    grid[y][x] = ENTITY_TYPES.EXIT;
+                    exitPlaced = true;
+                }
+            }
+        }
+        
+        // Handle keyboard input
+        function handleKeyPress(e) {
+            if (isGameOver) {
+                if (e.key === 'Enter') {
+                    isGameOver = false;
+                    createLevel(currentLevel);
+                }
+                return;
+            }
+            
+            let newX = playerX;
+            let newY = playerY;
+            
+            switch (e.key) {
+                case 'ArrowUp':
+                    newY--;
+                    break;
+                case 'ArrowDown':
+                    newY++;
+                    break;
+                case 'ArrowLeft':
+                    newX--;
+                    break;
+                case 'ArrowRight':
+                    newX++;
+                    break;
+                default:
+                    return;
+            }
+            
+            // Check if the move is valid
+            if (isValidMove(newX, newY)) {
+                movePlayer(newX, newY);
+            }
+        }
+        
+        // Check if a move is valid
+        function isValidMove(x, y) {
+            // Check bounds
+            if (x < 0 || y < 0 || x >= GRID_WIDTH || y >= GRID_HEIGHT) {
+                return false;
+            }
+            
+            // Check destination type
+            const destType = grid[y][x];
+            
+            if (destType === ENTITY_TYPES.WALL) {
+                return false;
+            }
+            
+            if (destType === ENTITY_TYPES.BOULDER) {
+                // Check if boulder can be pushed
+                const pushDirX = x - playerX;
+                const pushDestX = x + pushDirX;
+                
+                if (grid[y][pushDestX] === ENTITY_TYPES.EMPTY) {
+                    // Move the boulder
+                    grid[y][pushDestX] = ENTITY_TYPES.BOULDER;
+                    grid[y][x] = ENTITY_TYPES.EMPTY;
+                    return true;
+                }
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Move the player to a new position
+        function movePlayer(newX, newY) {
+            const destType = grid[newY][newX];
+            
+            // Handle diamond collection
+            if (destType === ENTITY_TYPES.DIAMOND) {
+                diamondsCollected++;
+                updateDiamondDisplay();
+            }
+            
+            // Handle reaching exit
+            if (destType === ENTITY_TYPES.EXIT) {
+                levelComplete();
+                return;
+            }
+            
+            // Update grid
+            grid[playerY][playerX] = ENTITY_TYPES.EMPTY;
+            grid[newY][newX] = ENTITY_TYPES.PLAYER;
+            
+            // Update player position
+            playerX = newX;
+            playerY = newY;
+            
+            // Redraw the game
+            drawGame();
+        }
+        
+        // Update the diamond display
+        function updateDiamondDisplay() {
+            diamondsInfo.textContent = `Diamonds: ${diamondsCollected}/${diamondsNeeded}`;
+        }
+        
+        // Level complete
+        function levelComplete() {
+            currentLevel++;
+            clearInterval(gameInterval);
+            clearInterval(timerInterval);
+            
+            // Show level complete message
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Level Complete!', canvas.width / 2, canvas.height / 2 - 40);
+            ctx.font = '24px Arial';
+            ctx.fillText(`Starting Level ${currentLevel} in 3 seconds...`, canvas.width / 2, canvas.height / 2 + 20);
+            
+            // Start new level after delay
+            setTimeout(() => {
+                createLevel(currentLevel);
+                gameInterval = setInterval(updateGame, 100);
+                timerInterval = setInterval(updateTimer, 1000);
+            }, 3000);
+        }
+        
+        // Game over
+        function gameOver(won) {
+            isGameOver = true;
+            clearInterval(gameInterval);
+            clearInterval(timerInterval);
+            
+            // Show game over message
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = won ? '#00FF00' : '#FF0000';
+            ctx.font = '40px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(won ? 'You Win!' : 'Game Over', canvas.width / 2, canvas.height / 2 - 40);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = '24px Arial';
+            ctx.fillText('Press Enter to restart', canvas.width / 2, canvas.height / 2 + 20);
+        }
+        
+        // Draw the game
+        function drawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw black background
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid
+            for (let y = 0; y < GRID_HEIGHT; y++) {
+                for (let x = 0; x < GRID_WIDTH; x++) {
+                    const tileType = grid[y][x];
+                    const drawX = x * TILE_SIZE;
+                    const drawY = y * TILE_SIZE;
+                    
+                    switch (tileType) {
+                        case ENTITY_TYPES.WALL:
+                            ctx.drawImage(sprites.wall, drawX, drawY);
+                            break;
+                        case ENTITY_TYPES.DIRT:
+                            ctx.drawImage(sprites.dirt, drawX, drawY);
+                            break;
+                        case ENTITY_TYPES.BOULDER:
+                            ctx.drawImage(sprites.boulder, drawX, drawY);
+                            break;
+                        case ENTITY_TYPES.DIAMOND:
+                            ctx.drawImage(sprites.diamond, drawX, drawY);
+                            break;
+                        case ENTITY_TYPES.PLAYER:
+                            ctx.drawImage(sprites.player, drawX, drawY);
+                            break;
+                        case ENTITY_TYPES.EXIT:
+                            ctx.drawImage(sprites.exit, drawX, drawY);
+                            break;
+                    }
+                }
+            }
+        }
+        
+        // Start the game when the page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
